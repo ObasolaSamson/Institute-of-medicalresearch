@@ -1,0 +1,40 @@
+<div class="p-6 bg-white rounded-lg shadow-md">
+    <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-bold">Users List</h2>
+        <button class=" bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-900"
+                (click)="createUser()">
+            + Create User
+        </button>
+    </div>
+
+    <div class="overflow-x-auto">
+        <table class="w-full border-collapse border border-gray-300">
+            <thead>
+                <tr class="bg-gray-100">
+                    <th class="border p-3 text-left">Name</th>
+                    <th class="border p-3 text-left">Email</th>
+                    <th class="border p-3 text-left">Role</th>
+                    <th class="border p-3 text-center">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let user of users" class="hover:bg-gray-50">
+                    <td class="border p-3">{{ user.name }}</td>
+                    <td class="border p-3">{{ user.email }}</td>
+                    <td class="border p-3">{{ user.role }}</td>
+                    <td class="border p-3 text-center">
+                        <button class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 mr-2"
+                                (click)="editUser(user)">
+                            Edit
+                        </button>
+                        <button class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+                                (click)="deleteUser(user.id)">
+                            Delete
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
