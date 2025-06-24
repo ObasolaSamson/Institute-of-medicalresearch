@@ -1,0 +1,107 @@
+<div class="p-6 bg-white shadow-md rounded-md">
+  <button class="mb-6 text-green-600 hover:underline" routerLink="/dashboard">
+    ← Back to Dashboard
+  </button>
+
+  <!-- Loader -->
+  <div
+    *ngIf="isLoading"
+    class="flex flex-col items-center justify-center py-12"
+  >
+    <div
+      class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-green-500 mb-4"
+    ></div>
+    <p class="text-gray-600">Loading household details...</p>
+  </div>
+
+  <!-- Content (shown when not loading) -->
+  <div *ngIf="!isLoading">
+    <!-- Top Section - Household Basic Info -->
+    <div class="mb-6">
+      <h2 class="text-2xl font-bold mb-4 text-green-700">
+        Household Information
+      </h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-700">
+        <div>
+          <strong>Household ID:</strong>
+          {{ householdDetails?.houseHoldDisplayId }}
+        </div>
+        <div>
+          <strong>Compound ID:</strong> {{ householdDetails?.compoundId }}
+        </div>
+        <div><strong>Ward:</strong> {{ householdDetails?.compoundWard }}</div>
+        <div>
+          <strong>Community:</strong> {{ householdDetails?.compoundCommunity }}
+        </div>
+        <div>
+          <strong>Street Name:</strong> {{ householdDetails?.streetName }}
+        </div>
+        <div>
+          <strong>House Number:</strong> {{ householdDetails?.houseNumber }}
+        </div>
+        <div>
+          <strong>Location Type:</strong>
+          {{ householdDetails?.locationClassification }}
+        </div>
+        <div>
+          <strong>Submission Date:</strong>
+          {{ householdDetails?.submissionDate | date : "mediumDate" }}
+        </div>
+        <div>
+          <strong>Enumeration Start:</strong>
+          {{ householdDetails?.enumerationStartDate | date : "mediumDate" }}
+        </div>
+        <div>
+          <strong>Enumeration End:</strong>
+          {{ householdDetails?.enumerationEndDate | date : "mediumDate" }}
+        </div>
+        <div>
+          <strong>Interview Date:</strong>
+          {{ householdDetails?.interviewDate | date : "mediumDate" }}
+        </div>
+      </div>
+    </div>
+
+    <!-- Divider -->
+    <hr class="my-8 border-gray-300" />
+
+    <!-- Question Responses Section -->
+    <div>
+      <h2 class="text-2xl font-bold mb-4 text-green-700">
+        Household Survey Responses
+      </h2>
+
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200 border rounded-md">
+          <thead class="bg-gray-100">
+            <tr>
+              <th
+                class="px-4 py-2 text-left text-sm font-semibold text-gray-600"
+              >
+                #
+              </th>
+              <th
+                class="px-4 py-2 text-left text-sm font-semibold text-gray-600"
+              >
+                Question
+              </th>
+              <th
+                class="px-4 py-2 text-left text-sm font-semibold text-gray-600"
+              >
+                Answer
+              </th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200">
+            <tr *ngFor="let response of householdDetails?.questionResponses">
+              <td class="px-4 py-2 text-sm">{{ response.questionSerialNo }}</td>
+              <td class="px-4 py-2 text-sm">{{ response.question }}</td>
+              <td class="px-4 py-2 text-sm">{{ response.answer || "N/A" }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,175 @@
+<div class="p-6 bg-white shadow-md rounded-md">
+  <!-- Back Button -->
+  <div class="mb-6">
+    <button
+      routerLink="/users"
+      class="flex items-center text-gray-600 hover:text-gray-900"
+    >
+      <svg
+        class="w-5 h-5 mr-2"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M10 19l-7-7m0 0l7-7m-7 7h18"
+        />
+      </svg>
+      Back
+    </button>
+  </div>
+
+  <div class="flex justify-between items-center mb-6">
+    <h2 class="text-xl font-semibold text-gray-700">Roles Management</h2>
+    <button
+      (click)="openCreateRoleModal()"
+      class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
+    >
+      + Add a new Role
+    </button>
+  </div>
+
+  <!-- Roles List -->
+  <div class="space-y-4">
+    <!-- Loader -->
+    <div
+      *ngIf="isLoading"
+      class="flex flex-col justify-center items-center min-h-[300px] w-full"
+    >
+      <div
+        class="animate-spin rounded-full h-16 w-16 border-4 border-green-500 border-t-transparent mb-4"
+      ></div>
+      <div class="text-lg font-semibold text-gray-600">Loading...</div>
+    </div>
+
+    <!-- Roles List -->
+    <div
+      *ngIf="!isLoading"
+      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+    >
+      <div
+        *ngFor="let role of roles"
+        class="bg-white border border-gray-200 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow"
+      >
+        <div class="flex justify-between items-start">
+          <div>
+            <h3 class="text-lg font-medium text-gray-900">
+              {{ role.roleName }}
+            </h3>
+          </div>
+          <button
+            (click)="deleteRole(role.id)"
+            class="text-red-600 hover:text-red-900"
+          >
+            <svg
+              class="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Empty State -->
+      <div *ngIf="roles.length === 0" class="col-span-full text-center py-8">
+        <p class="text-gray-500">No roles found</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Create Role Modal -->
+  <div
+    *ngIf="showCreateRoleModal"
+    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4"
+  >
+    <div class="bg-white rounded-lg shadow-xl w-full max-w-md">
+      <!-- Modal Header -->
+      <div class="flex justify-between items-center p-4 border-b">
+        <h3 class="text-xl font-semibold text-gray-800">Create New Role</h3>
+        <button
+          class="text-gray-500 hover:text-gray-700"
+          (click)="closeCreateRoleModal()"
+        >
+          <svg
+            class="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"
+            ></path>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="p-6">
+        <form [formGroup]="roleForm" (ngSubmit)="onSubmit()" class="space-y-4">
+          <!-- Role Name -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Role Name</label
+            >
+            <input
+              type="text"
+              formControlName="roleName"
+              class="w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500"
+              [ngClass]="{
+                'border-red-500':
+                  roleForm.get('roleName')?.invalid &&
+                  roleForm.get('roleName')?.touched
+              }"
+            />
+            <div
+              *ngIf="
+                roleForm.get('roleName')?.invalid &&
+                roleForm.get('roleName')?.touched
+              "
+              class="text-red-500 text-sm mt-1"
+            >
+              <span *ngIf="roleForm.get('roleName')?.errors?.['required']"
+                >Role name is required</span
+              >
+              <span *ngIf="roleForm.get('roleName')?.errors?.['minlength']"
+                >Role name must be at least 3 characters</span
+              >
+            </div>
+          </div>
+
+          <!-- Form Actions -->
+          <div class="flex justify-end space-x-3 mt-6">
+            <button
+              type="button"
+              class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+              (click)="closeCreateRoleModal()"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
+              [disabled]="roleForm.invalid"
+            >
+              Create Role
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

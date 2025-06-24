@@ -1,39 +1,416 @@
-<div class="p-6 space-y-6">
-    <h1 class="text-2xl font-semibold">Dashboard Overview</h1>
-
-    <!-- Cards Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <!-- Family Details Card -->
-        <div class="bg-white p-6 rounded-lg shadow">
-            <h2 class="text-lg font-semibold mb-2">👨‍👩‍👧‍👦 Family Members</h2>
-            <p class="text-gray-600">Total: {{ user.familyMembers.length }}</p>
-            <ul class="mt-2 text-gray-700">
-                <li *ngFor="let member of user.familyMembers">• {{ member }}</li>
-            </ul>
+<div class="p-6 bg-white shadow-md rounded-md">
+  <div class="my-5">
+    <div class="flex justify-between items-center">
+      <div>
+        <div class="font-semibold my-3 text-xl">
+          Total Households:
+          <span
+            class="text-green-700 border border-green-400 px-2 py-1 rounded"
+            >{{ totalHouseHolds }}</span
+          >
         </div>
-
-        <!-- Address Card -->
-        <div class="bg-white p-6 rounded-lg shadow">
-            <h2 class="text-lg font-semibold mb-2">📍 Address</h2>
-            <p class="text-gray-600">{{ user.address }}</p>
+        <div class="font-semibold my-3 text-xl">
+          Total Household Members:
+          <span
+            class="text-green-700 border border-green-400 px-2 py-1 rounded"
+            >{{ totalHouseHoldMembers }}</span
+          >
         </div>
-
-        <!-- Earnings Card -->
-        <div class="bg-white p-6 rounded-lg shadow">
-            <h2 class="text-lg font-semibold mb-2">💰 Earnings</h2>
-            <p class="text-gray-600">{{ user.earnings }} this month</p>
-        </div>
-
-        <!-- Hospital Records Card -->
-        <div class="bg-white p-6 rounded-lg shadow">
-            <h2 class="text-lg font-semibold mb-2">🏥 Hospital Visits</h2>
-            <p class="text-gray-600">Last Visit: {{ user.lastHospitalVisit }}</p>
-            <ul class="mt-2 text-gray-700">
-                <li *ngFor="let record of user.hospitalRecords">
-                    • {{ record.date }} - {{ record.hospital }} ({{ record.reason }})
-                </li>
-            </ul>
-        </div>
+      </div>
+      <!-- Add Upload Button -->
+      <div>
+        <button
+          routerLink="/uploads"
+          class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 flex items-center"
+        >
+          <svg
+            class="w-5 h-5 mr-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
+            />
+          </svg>
+          Upload Files
+        </button>
+      </div>
     </div>
-</div>
+  </div>
+  <!-- Tabs -->
+  <div class="flex space-x-4 border-b mb-6">
+    <button
+      class="py-2 px-4 border-b-2 font-medium"
+      [ngClass]="
+        selectedTab === 'households'
+          ? 'border-green-700 text-green-700'
+          : 'border-transparent text-gray-500 hover:text-green-500'
+      "
+      (click)="selectTab('households')"
+    >
+      Households
+    </button>
 
+    <button
+      class="py-2 px-4 border-b-2 font-medium"
+      [ngClass]="
+        selectedTab === 'members'
+          ? 'border-green-700 text-green-700'
+          : 'border-transparent text-gray-500 hover:text-green-500'
+      "
+      (click)="selectTab('members')"
+    >
+      Household Members
+    </button>
+  </div>
+
+  <!-- Content -->
+  <div *ngIf="selectedTab === 'households'">
+    <h2 class="text-xl font-semibold text-gray-700 mb-4">
+      Household Information
+    </h2>
+    <div class="p-6">
+      <!-- Filters Section -->
+      <div class="mb-12 grid grid-cols-1 md:grid-cols-5 gap-4">
+        <!-- Name Filter -->
+        <div>
+          <label
+            for="nameFilter"
+            class="block text-sm font-medium text-gray-700 mb-1"
+            >Name</label
+          >
+          <input
+            type="text"
+            id="nameFilter"
+            class="w-full rounded-md border-gray-300 placeholder-gray-400 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            placeholder="Filter by name"
+          />
+        </div>
+
+        <!-- LGA Filter -->
+        <!-- <div>
+          <label
+            for="lgaFilter"
+            class="block text-sm font-medium text-gray-700 mb-1"
+            >Local Government Area</label
+          >
+          <input
+            type="text"
+            id="lgaFilter"
+            class="w-full rounded-md border-gray-300 placeholder-gray-400 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            placeholder="Filter by LGA"
+          />
+        </div> -->
+
+        <!-- search button to search after filtering -->
+        <div class="flex items-end">
+          <button
+            class="bg-green-500 text-white px-3 py-1.5 rounded-md h-[42px] w-24"
+          >
+            Search
+          </button>
+        </div>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="min-w-full bg-white rounded-lg overflow-hidden">
+          <thead class="bg-gray-100 border-b">
+            <tr>
+              <th
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
+                Household ID
+              </th>
+
+              <th
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
+                No. of Household Members
+              </th>
+              <th
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
+                Enumeration Start Date
+              </th>
+              <th
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
+                Enumeration End Date
+              </th>
+              <th
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
+                Interview Date
+              </th>
+              <th
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
+                Submission Date
+              </th>
+              <th
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
+                Status
+              </th>
+              <th
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
+                Details
+              </th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200">
+            <tr *ngFor="let household of households">
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                {{ household.houseHoldDisplayId }}
+              </td>
+
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                {{ household.numberOfPersonsInHouseHold }}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                {{ household.enumerationStartDate | date : "mediumDate" }}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                {{ household.enumerationEndDate | date : "mediumDate" }}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                {{ household.interviewDate | date : "mediumDate" }}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                {{ household.submissionDate | date : "mediumDate" }}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                {{ household.isActive }}
+              </td>
+              <!-- <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                <button
+                  (click)="viewPatientDetails(patient)"
+                  class="text-blue-600 hover:text-blue-900 font-medium"
+                >
+                  See More
+                </button>
+              </td> -->
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                <button
+                  class="text-green-600 hover:text-green-900 font-medium"
+                  (click)="viewHouseholdDetails(household.id)"
+                >
+                  See More
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="mt-6 flex justify-center items-center space-x-4">
+        <!-- Previous Button -->
+        <button
+          (click)="onPreviousPage()"
+          [disabled]="currentPage === 1"
+          class="px-4 py-2 rounded-md border text-sm font-medium bg-white text-gray-700 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          Previous
+        </button>
+
+        <!-- Page Info -->
+        <div class="text-gray-600 text-sm font-medium">
+          Page {{ currentPage }} of {{ totalPages }}
+        </div>
+
+        <!-- Next Button -->
+        <button
+          (click)="onNextPage()"
+          [disabled]="currentPage === totalPages"
+          class="px-4 py-2 rounded-md border text-sm font-medium bg-white text-gray-700 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          Next
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="selectedTab === 'members'">
+    <h2 class="text-xl font-semibold text-gray-700 mb-4">
+      Household Survey Responses
+    </h2>
+
+    <div class="mb-12 grid grid-cols-1 md:grid-cols-5 gap-4">
+      <!-- Name Filter -->
+      <div>
+        <label
+          for="nameFilter"
+          class="block text-sm font-medium text-gray-700 mb-1"
+          >Name</label
+        >
+        <input
+          type="text"
+          id="nameFilter"
+          [(ngModel)]="nameFilter"
+          (input)="applyFilters('name')"
+          class="w-full rounded-md border-gray-300 placeholder-gray-400 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+          placeholder="Filter by name"
+        />
+      </div>
+
+      <!-- State Filter -->
+      <div>
+        <label
+          for="stateFilter"
+          class="block text-sm font-medium text-gray-700 mb-1"
+          >Gender</label
+        >
+        <input
+          type="text"
+          id="stateFilter"
+          class="w-full rounded-md border-gray-300 placeholder-gray-400 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+          placeholder="Filter by state"
+        />
+      </div>
+
+      <!-- search button to search after filtering -->
+      <div class="flex items-end">
+        <button
+          class="bg-green-500 text-white px-3 py-1.5 rounded-md h-[42px] w-24"
+        >
+          Search
+        </button>
+      </div>
+    </div>
+
+    <div class="overflow-x-auto">
+      <!-- Loader -->
+      <div
+        *ngIf="isLoading"
+        class="flex flex-col justify-center items-center min-h-[300px] w-full"
+      >
+        <div
+          class="animate-spin rounded-full h-16 w-16 border-4 border-blue-500 border-t-transparent mb-4"
+        ></div>
+        <div class="text-lg font-semibold text-gray-600">Loading...</div>
+      </div>
+
+      <table class="min-w-full bg-white rounded-lg overflow-hidden">
+        <thead *ngIf="!isLoading" class="bg-gray-100 border-b">
+          <tr>
+            <th
+              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+            >
+              Name
+            </th>
+            <th
+              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+            >
+              Age group
+            </th>
+
+            <th
+              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+            >
+              Gender
+            </th>
+            <th
+              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+            >
+              Family Role
+            </th>
+            <th
+              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+            >
+              Occupation
+            </th>
+            <th
+              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+            >
+              Work Status
+            </th>
+            <th
+              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+            >
+              Educational Qualification
+            </th>
+            <th
+              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+            >
+              Date of Birth
+            </th>
+          </tr>
+        </thead>
+
+        <tbody class="divide-y divide-gray-200">
+          <tr *ngFor="let householdMember of paginatedHouseholdMembers">
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+              {{ householdMember.name }}
+            </td>
+
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+              {{ householdMember.ageGroup }}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+              {{ householdMember.gender }}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+              {{ householdMember.memberRole }}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+              {{ householdMember.occupation }}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+              {{ householdMember.workStatus }}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+              {{ householdMember.educationalQualification }}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+              {{ householdMember.dateOfBirth?.split(" ")[0] }}
+            </td>
+
+            <!-- <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+              <button
+                class="text-blue-600 hover:text-blue-900 font-medium"
+                (click)="viewHouseholdDetails(householdMember.id)"
+              >
+                See More
+              </button>
+            </td> -->
+          </tr>
+
+          <tr *ngIf="!isLoading && filteredHouseholdMembers.length === 0">
+            <td colspan="8" class="text-center py-4">No members found.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div
+      *ngIf="!isLoading"
+      class="mt-6 flex justify-center items-center space-x-4"
+    >
+      <!-- Previous Button -->
+      <button
+        (click)="onPreviousPage()"
+        [disabled]="currentPage === 1"
+        class="px-4 py-2 rounded-md border text-sm font-medium bg-white text-gray-700 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        Previous
+      </button>
+
+      <!-- Page Info -->
+      <div class="text-gray-600 text-sm font-medium">
+        Page {{ currentPage }} of {{ totalPages }}
+      </div>
+
+      <!-- Next Button -->
+      <button
+        (click)="onNextPage()"
+        [disabled]="currentPage === totalPages"
+        class="px-4 py-2 rounded-md border text-sm font-medium bg-white text-gray-700 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        Next
+      </button>
+    </div>
+  </div>
+</div>
