@@ -39,6 +39,26 @@
           Upload Files
         </button>
       </div>
+      <div>
+        <button
+          class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 flex items-center"
+        >
+          <svg
+            class="w-5 h-5 mr-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5m0 0l5-5m-5 5V3"
+            />
+          </svg>
+          Download
+        </button>
+      </div>
     </div>
   </div>
   <!-- Tabs -->
@@ -123,6 +143,21 @@
               <th
                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
               >
+                Ward
+              </th>
+              <th
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
+                Street Name
+              </th>
+              <th
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
+                Community
+              </th>
+              <th
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
                 Household ID
               </th>
 
@@ -131,31 +166,31 @@
               >
                 No. of Household Members
               </th>
-              <th
+              <!-- <th
                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
               >
                 Enumeration Start Date
-              </th>
-              <th
+              </th> -->
+              <!-- <th
                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
               >
                 Enumeration End Date
-              </th>
+              </th> -->
               <th
                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
               >
                 Interview Date
               </th>
-              <th
+              <!-- <th
                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
               >
                 Submission Date
-              </th>
-              <th
+              </th> -->
+              <!-- <th
                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
               >
                 Status
-              </th>
+              </th> -->
               <th
                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
               >
@@ -166,27 +201,36 @@
           <tbody class="divide-y divide-gray-200">
             <tr *ngFor="let household of households">
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                {{ household.ward }}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                {{ household.streetName }}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                {{ household.community }}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                 {{ household.houseHoldDisplayId }}
               </td>
 
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                 {{ household.numberOfPersonsInHouseHold }}
               </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+              <!-- <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                 {{ household.enumerationStartDate | date : "mediumDate" }}
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+              </td> -->
+              <!-- <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                 {{ household.enumerationEndDate | date : "mediumDate" }}
-              </td>
+              </td> -->
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                 {{ household.interviewDate | date : "mediumDate" }}
               </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+              <!-- <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                 {{ household.submissionDate | date : "mediumDate" }}
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+              </td> -->
+              <!-- <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                 {{ household.isActive }}
-              </td>
+              </td> -->
               <!-- <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                 <button
                   (click)="viewPatientDetails(patient)"

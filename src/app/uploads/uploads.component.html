@@ -1,184 +1,217 @@
 <div class="p-6 bg-white shadow-md rounded-md">
   <div class="max-w-4xl mx-auto">
-    <a
-      href="assets/files/testHouseholdupload.xlsx"
-      download
-      class="text-blue-600 underline"
-    >
-      Download Household File
-    </a>
+    <!-- <div class="flex justify-between items-start">
+      <div>
+        <a
+          href="assets/files/testHouseholdupload.xlsx"
+          download
+          class="text-blue-600 underline"
+        >
+          Download Household File
+        </a>
+      </div>
+      <div>
+        <a
+          href="assets/files/uploadmember2.xlsx"
+          download
+          class="text-blue-600 underline ml-4"
+        >
+          Download Member File
+        </a>
+      </div>
+    </div> -->
 
-    <a
-      href="assets/files/uploadmember2.xlsx"
-      download
-      class="text-blue-600 underline ml-4"
-    >
-      Download Member File
-    </a>
-
-    <h2 class="text-2xl font-semibold text-gray-800 mb-6">File Uploads</h2>
-
+    <h2 class="text-2xl font-semibold text-gray-800 mb-2">File Uploads</h2>
+    <h3 class="mb-6">
+      Document must maintain the format in the samples provided below.
+    </h3>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
       <!-- Households Upload -->
-      <div class="bg-gray-50 p-6 rounded-lg border border-gray-200">
-        <h3 class="text-lg font-medium text-gray-900 mb-4">
-          Upload Households
-        </h3>
-        <form
-          [formGroup]="householdUploadForm"
-          (ngSubmit)="onHouseholdSubmit()"
-          class="space-y-6"
-        >
-          <div class="space-y-2">
-            <label class="block text-sm font-medium text-gray-700"
-              >Select Household File</label
-            >
-            <div
-              class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md"
-            >
-              <div class="space-y-1 text-center">
-                <svg
-                  class="mx-auto h-12 w-12 text-gray-400"
-                  stroke="currentColor"
-                  fill="none"
-                  viewBox="0 0 48 48"
-                >
-                  <path
-                    d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                </svg>
-                <div class="flex text-sm text-gray-600">
-                  <label
-                    for="household-file-upload"
-                    class="relative cursor-pointer bg-white rounded-md font-medium text-green-600 hover:text-green-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-green-500"
+      <div>
+        <div class="mb-3">
+          Download Sample:<a
+            href="assets/files/testHouseholdupload.xlsx"
+            download
+            class="text-blue-600"
+          >
+            Download Household Sample
+          </a>
+        </div>
+        <div class="bg-gray-50 p-6 rounded-lg border border-gray-200">
+          <h3 class="text-lg font-medium text-gray-900 mb-4">
+            Upload Households
+          </h3>
+          <form
+            [formGroup]="householdUploadForm"
+            (ngSubmit)="onHouseholdSubmit()"
+            class="space-y-6"
+          >
+            <div class="space-y-2">
+              <label class="block text-sm font-medium text-gray-700"
+                >Select Household File</label
+              >
+              <div
+                class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md"
+              >
+                <div class="space-y-1 text-center">
+                  <svg
+                    class="mx-auto h-12 w-12 text-gray-400"
+                    stroke="currentColor"
+                    fill="none"
+                    viewBox="0 0 48 48"
                   >
-                    <span>Upload a file</span>
-                    <input
-                      id="household-file-upload"
-                      name="household-file-upload"
-                      type="file"
-                      class="sr-only"
-                      (change)="onHouseholdFileSelected($event)"
+                    <path
+                      d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
                     />
-                  </label>
-                  <p class="pl-1">or drag and drop</p>
+                  </svg>
+                  <div class="flex text-sm text-gray-600">
+                    <label
+                      for="household-file-upload"
+                      class="relative cursor-pointer bg-white rounded-md font-medium text-green-600 hover:text-green-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-green-500"
+                    >
+                      <span>Upload a file</span>
+                      <input
+                        id="household-file-upload"
+                        name="household-file-upload"
+                        type="file"
+                        class="sr-only"
+                        (change)="onHouseholdFileSelected($event)"
+                      />
+                    </label>
+                    <p class="pl-1">or drag and drop</p>
+                  </div>
+                  <p class="text-xs text-gray-500">Excel files up to 10MB</p>
                 </div>
-                <p class="text-xs text-gray-500">Excel files up to 10MB</p>
+              </div>
+              <p class="text-sm text-gray-500 mt-2">
+                {{ getHouseholdFileName() }}
+              </p>
+            </div>
+
+            <!-- Upload Progress -->
+            <div *ngIf="isHouseholdUploading" class="space-y-2">
+              <div class="flex justify-between text-sm text-gray-600">
+                <span>Uploading...</span>
+                <span>{{ householdUploadProgress }}%</span>
+              </div>
+              <div class="w-full bg-gray-200 rounded-full h-2.5">
+                <div
+                  class="bg-green-600 h-2.5 rounded-full"
+                  [style.width.%]="householdUploadProgress"
+                ></div>
               </div>
             </div>
-            <p class="text-sm text-gray-500 mt-2">
-              {{ getHouseholdFileName() }}
-            </p>
-          </div>
 
-          <!-- Upload Progress -->
-          <div *ngIf="isHouseholdUploading" class="space-y-2">
-            <div class="flex justify-between text-sm text-gray-600">
-              <span>Uploading...</span>
-              <span>{{ householdUploadProgress }}%</span>
+            <!-- Submit Button -->
+            <div class="flex justify-end">
+              <button
+                type="submit"
+                class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                [disabled]="householdUploadForm.invalid || isHouseholdUploading"
+              >
+                {{
+                  isHouseholdUploading ? "Uploading..." : "Upload Households"
+                }}
+              </button>
             </div>
-            <div class="w-full bg-gray-200 rounded-full h-2.5">
-              <div
-                class="bg-green-600 h-2.5 rounded-full"
-                [style.width.%]="householdUploadProgress"
-              ></div>
-            </div>
-          </div>
-
-          <!-- Submit Button -->
-          <div class="flex justify-end">
-            <button
-              type="submit"
-              class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed"
-              [disabled]="householdUploadForm.invalid || isHouseholdUploading"
-            >
-              {{ isHouseholdUploading ? "Uploading..." : "Upload Households" }}
-            </button>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
 
       <!-- Household Members Upload -->
-      <div class="bg-gray-50 p-6 rounded-lg border border-gray-200">
-        <h3 class="text-lg font-medium text-gray-900 mb-4">
-          Upload Household Members
-        </h3>
-        <form
-          [formGroup]="memberUploadForm"
-          (ngSubmit)="onMemberSubmit()"
-          class="space-y-6"
-        >
-          <div class="space-y-2">
-            <label class="block text-sm font-medium text-gray-700"
-              >Select Members File</label
-            >
-            <div
-              class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md"
-            >
-              <div class="space-y-1 text-center">
-                <svg
-                  class="mx-auto h-12 w-12 text-gray-400"
-                  stroke="currentColor"
-                  fill="none"
-                  viewBox="0 0 48 48"
-                >
-                  <path
-                    d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                </svg>
-                <div class="flex text-sm text-gray-600">
-                  <label
-                    for="member-file-upload"
-                    class="relative cursor-pointer bg-white rounded-md font-medium text-green-600 hover:text-green-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-green-500"
+      <div>
+        <div class="mb-3">
+          Download sample:<a
+            href="assets/files/uploadmember2.xlsx"
+            download
+            class="text-blue-600"
+          >
+            Download Member sample
+          </a>
+        </div>
+        <div class="bg-gray-50 p-6 rounded-lg border border-gray-200">
+          <h3 class="text-lg font-medium text-gray-900 mb-4">
+            Upload Household Members
+          </h3>
+          <form
+            [formGroup]="memberUploadForm"
+            (ngSubmit)="onMemberSubmit()"
+            class="space-y-6"
+          >
+            <div class="space-y-2">
+              <label class="block text-sm font-medium text-gray-700"
+                >Select Members File</label
+              >
+              <div
+                class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md"
+              >
+                <div class="space-y-1 text-center">
+                  <svg
+                    class="mx-auto h-12 w-12 text-gray-400"
+                    stroke="currentColor"
+                    fill="none"
+                    viewBox="0 0 48 48"
                   >
-                    <span>Upload a file</span>
-                    <input
-                      id="member-file-upload"
-                      name="member-file-upload"
-                      type="file"
-                      class="sr-only"
-                      (change)="onMemberFileSelected($event)"
+                    <path
+                      d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
                     />
-                  </label>
-                  <p class="pl-1">or drag and drop</p>
+                  </svg>
+                  <div class="flex text-sm text-gray-600">
+                    <label
+                      for="member-file-upload"
+                      class="relative cursor-pointer bg-white rounded-md font-medium text-green-600 hover:text-green-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-green-500"
+                    >
+                      <span>Upload a file</span>
+                      <input
+                        id="member-file-upload"
+                        name="member-file-upload"
+                        type="file"
+                        class="sr-only"
+                        (change)="onMemberFileSelected($event)"
+                      />
+                    </label>
+                    <p class="pl-1">or drag and drop</p>
+                  </div>
+                  <p class="text-xs text-gray-500">Excel up to 10MB</p>
                 </div>
-                <p class="text-xs text-gray-500">Excel up to 10MB</p>
+              </div>
+              <p class="text-sm text-gray-500 mt-2">
+                {{ getMemberFileName() }}
+              </p>
+            </div>
+
+            <!-- Upload Progress -->
+            <div *ngIf="isMemberUploading" class="space-y-2">
+              <div class="flex justify-between text-sm text-gray-600">
+                <span>Uploading...</span>
+                <span>{{ memberUploadProgress }}%</span>
+              </div>
+              <div class="w-full bg-gray-200 rounded-full h-2.5">
+                <div
+                  class="bg-green-600 h-2.5 rounded-full"
+                  [style.width.%]="memberUploadProgress"
+                ></div>
               </div>
             </div>
-            <p class="text-sm text-gray-500 mt-2">{{ getMemberFileName() }}</p>
-          </div>
 
-          <!-- Upload Progress -->
-          <div *ngIf="isMemberUploading" class="space-y-2">
-            <div class="flex justify-between text-sm text-gray-600">
-              <span>Uploading...</span>
-              <span>{{ memberUploadProgress }}%</span>
+            <!-- Submit Button -->
+            <div class="flex justify-end">
+              <button
+                type="submit"
+                class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                [disabled]="memberUploadForm.invalid || isMemberUploading"
+              >
+                {{ isMemberUploading ? "Uploading..." : "Upload Members" }}
+              </button>
             </div>
-            <div class="w-full bg-gray-200 rounded-full h-2.5">
-              <div
-                class="bg-green-600 h-2.5 rounded-full"
-                [style.width.%]="memberUploadProgress"
-              ></div>
-            </div>
-          </div>
-
-          <!-- Submit Button -->
-          <div class="flex justify-end">
-            <button
-              type="submit"
-              class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed"
-              [disabled]="memberUploadForm.invalid || isMemberUploading"
-            >
-              {{ isMemberUploading ? "Uploading..." : "Upload Members" }}
-            </button>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
     </div>
   </div>
