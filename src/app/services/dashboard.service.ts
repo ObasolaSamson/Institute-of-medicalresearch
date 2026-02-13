@@ -27,6 +27,8 @@ export class DashboardService {
     });
   }
 
+ 
+
   getHouseholds(payload: any): Observable<any> {
     const headers = this.getAuthHeaders();
 
@@ -62,6 +64,13 @@ export class DashboardService {
       }
     );
   }
+  deleteHouseholdMember(id: string): Observable<any> {
+    const headers = this.getAuthHeaders();
+    return this.http.delete(
+      `${this.baseUrl}/houseHoldMembers/deleteHouseHoldMember`,
+      { headers, params: { id } }
+    );
+  }
 
   getStaff(): Observable<any> {
     const headers = this.getAuthHeaders();
@@ -83,6 +92,14 @@ export class DashboardService {
     );
   }
 
+  getSearchKeys(): Observable<any> {
+    const headers = this.getAuthHeaders();
+
+    return this.http.get(
+      `${this.baseUrl}/houseHoldMembers/getSearchKey`, 
+      { headers });
+  }
+
   getHouseholdmembers(payload: any): Observable<any> {
     const headers = this.getAuthHeaders();
 
@@ -92,6 +109,15 @@ export class DashboardService {
       {
         headers,
       }
+    );
+  }
+
+  addHouseholdMember(payload: any): Observable<any> {
+    const headers = this.getAuthHeaders();
+    return this.http.post(
+      `${this.baseUrl}/houseHoldMembers/saveHouseHoldMember`,
+      payload,
+      { headers }
     );
   }
 

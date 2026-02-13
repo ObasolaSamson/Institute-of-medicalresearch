@@ -96,48 +96,72 @@
     <div class="p-6">
       <!-- Filters Section -->
       <div class="mb-12 grid grid-cols-1 md:grid-cols-5 gap-4">
-        <!-- Name Filter -->
+        <!-- Search Key Dropdown -->
         <div>
           <label
-            for="nameFilter"
+            for="householdSearchKey"
             class="block text-sm font-medium text-gray-700 mb-1"
-            >Name</label
+            >Search Key</label
+          >
+          <select
+            id="householdSearchKey"
+            [(ngModel)]="selectedHouseholdSearchKey"
+            (change)="onHouseholdSearchKeyChange()"
+            class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+          >
+            <option [ngValue]="null">Select a search key</option>
+            <option *ngFor="let key of searchKeys" [ngValue]="key">
+              {{ key.name }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Search Value Input -->
+        <div>
+          <label
+            for="householdSearchValue"
+            class="block text-sm font-medium text-gray-700 mb-1"
+            >Search String</label
           >
           <input
             type="text"
-            id="nameFilter"
+            id="householdSearchValue"
+            [(ngModel)]="householdSearchValue"
             class="w-full rounded-md border-gray-300 placeholder-gray-400 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-            placeholder="Filter by name"
+            placeholder="Enter search value"
           />
         </div>
 
-        <!-- LGA Filter -->
-        <!-- <div>
-          <label
-            for="lgaFilter"
-            class="block text-sm font-medium text-gray-700 mb-1"
-            >Local Government Area</label
-          >
-          <input
-            type="text"
-            id="lgaFilter"
-            class="w-full rounded-md border-gray-300 placeholder-gray-400 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-            placeholder="Filter by LGA"
-          />
-        </div> -->
-
-        <!-- search button to search after filtering -->
-        <div class="flex items-end">
+        <!-- search and reset buttons -->
+        <div class="flex items-end space-x-2">
           <button
+            (click)="onSearchHouseholds()"
             class="bg-green-500 text-white px-3 py-1.5 rounded-md h-[42px] w-24"
           >
             Search
+          </button>
+          <button
+            (click)="resetHouseholdsSearch()"
+            class="bg-gray-200 text-gray-700 px-3 py-1.5 rounded-md h-[42px] w-24 hover:bg-gray-300"
+          >
+            Reset
           </button>
         </div>
       </div>
 
       <div class="overflow-x-auto">
-        <table class="min-w-full bg-white rounded-lg overflow-hidden">
+        <!-- Loader -->
+        <div
+          *ngIf="isLoading"
+          class="flex flex-col justify-center items-center min-h-[300px] w-full"
+        >
+          <div
+            class="animate-spin rounded-full h-16 w-16 border-4 border-blue-500 border-t-transparent mb-4"
+          ></div>
+          <div class="text-lg font-semibold text-gray-600">Loading...</div>
+        </div>
+
+        <table *ngIf="!isLoading" class="min-w-full bg-white rounded-lg overflow-hidden">
           <thead class="bg-gray-100 border-b">
             <tr>
               <th
@@ -248,6 +272,9 @@
                 </button>
               </td>
             </tr>
+            <tr *ngIf="!isLoading && households.length === 0">
+              <td colspan="7" class="text-center py-4 text-gray-500">No households found.</td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -279,49 +306,62 @@
   </div>
 
   <div *ngIf="selectedTab === 'members'">
-    <h2 class="text-xl font-semibold text-gray-700 mb-4">
-      Household Survey Responses
-    </h2>
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-xl font-semibold text-gray-700">
+        Household Survey Responses
+      </h2>
+    </div>
 
     <div class="mb-12 grid grid-cols-1 md:grid-cols-5 gap-4">
-      <!-- Name Filter -->
+      <!-- Search Key Dropdown -->
       <div>
         <label
-          for="nameFilter"
+          for="searchKey"
           class="block text-sm font-medium text-gray-700 mb-1"
-          >Name</label
+          >Search Key</label
+        >
+        <select
+          id="searchKey"
+          [(ngModel)]="selectedSearchKey"
+          (change)="onSearchKeyChange()"
+          class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+        >
+          <option [ngValue]="null">Select a search key</option>
+          <option *ngFor="let key of searchKeys" [ngValue]="key">
+            {{ key.name }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Search Value Input -->
+      <div>
+        <label
+          for="searchValue"
+          class="block text-sm font-medium text-gray-700 mb-1"
+          >Search String</label
         >
         <input
           type="text"
-          id="nameFilter"
-          [(ngModel)]="nameFilter"
-          (input)="applyFilters('name')"
+          id="searchValue"
+          [(ngModel)]="searchValue"
           class="w-full rounded-md border-gray-300 placeholder-gray-400 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-          placeholder="Filter by name"
+          placeholder="Enter search value"
         />
       </div>
 
-      <!-- State Filter -->
-      <div>
-        <label
-          for="stateFilter"
-          class="block text-sm font-medium text-gray-700 mb-1"
-          >Gender</label
-        >
-        <input
-          type="text"
-          id="stateFilter"
-          class="w-full rounded-md border-gray-300 placeholder-gray-400 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-          placeholder="Filter by state"
-        />
-      </div>
-
-      <!-- search button to search after filtering -->
-      <div class="flex items-end">
+      <!-- search and reset buttons -->
+      <div class="flex items-end space-x-2">
         <button
+          (click)="onSearchHouseholdMembers()"
           class="bg-green-500 text-white px-3 py-1.5 rounded-md h-[42px] w-24"
         >
           Search
+        </button>
+        <button
+          (click)="resetMembersSearch()"
+          class="bg-gray-200 text-gray-700 px-3 py-1.5 rounded-md h-[42px] w-24 hover:bg-gray-300"
+        >
+          Reset
         </button>
       </div>
     </div>
@@ -329,7 +369,7 @@
     <div class="overflow-x-auto">
       <!-- Loader -->
       <div
-        *ngIf="isLoading"
+        *ngIf="isLoadingMembers"
         class="flex flex-col justify-center items-center min-h-[300px] w-full"
       >
         <div
@@ -338,8 +378,8 @@
         <div class="text-lg font-semibold text-gray-600">Loading...</div>
       </div>
 
-      <table class="min-w-full bg-white rounded-lg overflow-hidden">
-        <thead *ngIf="!isLoading" class="bg-gray-100 border-b">
+      <table *ngIf="!isLoadingMembers" class="min-w-full bg-white rounded-lg overflow-hidden">
+        <thead class="bg-gray-100 border-b">
           <tr>
             <th
               class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
@@ -382,6 +422,11 @@
             >
               Date of Birth
             </th>
+            <th
+              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+            >
+              Actions
+            </th>
           </tr>
         </thead>
 
@@ -412,25 +457,37 @@
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
               {{ householdMember.dateOfBirth?.split(" ")[0] }}
             </td>
-
-            <!-- <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
               <button
-                class="text-blue-600 hover:text-blue-900 font-medium"
-                (click)="viewHouseholdDetails(householdMember.id)"
+                (click)="deleteHouseholdMember(householdMember.id)"
+                class="text-red-600 hover:text-red-900 font-medium"
+                title="Delete member"
               >
-                See More
+                <svg
+                  class="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                  />
+                </svg>
               </button>
-            </td> -->
+            </td>
           </tr>
 
-          <tr *ngIf="!isLoading && filteredHouseholdMembers.length === 0">
-            <td colspan="8" class="text-center py-4">No members found.</td>
+          <tr *ngIf="!isLoadingMembers && paginatedHouseholdMembers.length === 0">
+            <td colspan="9" class="text-center py-4 text-gray-500">No members found.</td>
           </tr>
         </tbody>
       </table>
     </div>
     <div
-      *ngIf="!isLoading"
+      *ngIf="!isLoadingMembers"
       class="mt-6 flex justify-center items-center space-x-4"
     >
       <!-- Previous Button -->
@@ -457,4 +514,5 @@
       </button>
     </div>
   </div>
+
 </div>

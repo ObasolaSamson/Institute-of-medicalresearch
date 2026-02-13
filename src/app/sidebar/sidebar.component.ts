@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../services/auth.service';
+import { InactivityService } from '../services/inactivity.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -12,10 +13,14 @@ export class SidebarComponent {
   constructor(
     private router: Router,
     private toastr: ToastrService,
-    private authService: AuthService
+    private authService: AuthService,
+    private inactivityService: InactivityService
   ) {}
 
   logout() {
+    // Stop inactivity monitoring
+    this.inactivityService.stopMonitoring();
+    
     // Use the auth service to logout
     this.authService.logout();
 

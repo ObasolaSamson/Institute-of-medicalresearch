@@ -28,6 +28,10 @@
           {{ householdDetails?.houseHoldDisplayId }}
         </div>
         <div>
+          <strong>Household Head:</strong>
+          {{ householdDetails?.houseHoldHead }}
+        </div>
+        <div>
           <strong>Compound ID:</strong> {{ householdDetails?.compoundId }}
         </div>
         <div><strong>Ward:</strong> {{ householdDetails?.compoundWard }}</div>
@@ -68,9 +72,30 @@
 
     <!-- Question Responses Section -->
     <div>
-      <h2 class="text-2xl font-bold mb-4 text-green-700">
-        Household Survey Responses
-      </h2>
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-2xl font-bold text-green-700">
+          Household Survey Responses
+        </h2>
+        <button
+          (click)="openAddMemberModal()"
+          class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 flex items-center"
+        >
+          <svg
+            class="w-5 h-5 mr-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 4v16m8-8H4"
+            />
+          </svg>
+          Add Member
+        </button>
+      </div>
 
       <div class="overflow-x-auto">
         <table class="min-w-full divide-y divide-gray-200 border rounded-md">
@@ -102,6 +127,304 @@
           </tbody>
         </table>
       </div>
+    </div>
+  </div>
+
+  <!-- Add Member Modal -->
+  <div
+    *ngIf="showAddMemberModal"
+    class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50"
+    (click)="closeAddMemberModal()"
+  >
+    <div
+      class="relative top-20 mx-auto p-5 border w-11/12 md:w-3/4 lg:w-1/2 shadow-lg rounded-md bg-white"
+      (click)="$event.stopPropagation()"
+    >
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-xl font-semibold text-gray-700">Add Household Member</h3>
+        <button
+          (click)="closeAddMemberModal()"
+          class="text-gray-400 hover:text-gray-600"
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </button>
+      </div>
+
+      <form (ngSubmit)="onAddMember()" class="space-y-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Household ID</label
+            >
+            <input
+              type="text"
+              [(ngModel)]="newMember.houseHoldId"
+              name="houseHoldId"
+              class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50"
+              placeholder="e.g., HH6"
+              readonly
+            />
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >First Name <span class="text-red-500">*</span></label
+            >
+            <input
+              type="text"
+              [(ngModel)]="newMember.firstName"
+              name="firstName"
+              required
+              class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            />
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Middle Name</label
+            >
+            <input
+              type="text"
+              [(ngModel)]="newMember.middleName"
+              name="middleName"
+              class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            />
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Last Name <span class="text-red-500">*</span></label
+            >
+            <input
+              type="text"
+              [(ngModel)]="newMember.lastName"
+              name="lastName"
+              required
+              class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            />
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Phone Number</label
+            >
+            <input
+              type="text"
+              [(ngModel)]="newMember.phoneNumber"
+              name="phoneNumber"
+              class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            />
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Member Role <span class="text-red-500">*</span></label
+            >
+            <input
+              type="text"
+              [(ngModel)]="newMember.memberRole"
+              name="memberRole"
+              required
+              class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+              placeholder="e.g., child"
+            />
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Gender <span class="text-red-500">*</span></label
+            >
+            <select
+              [(ngModel)]="newMember.gender"
+              name="gender"
+              required
+              class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            >
+              <option value="">Select gender</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Age Group <span class="text-red-500">*</span></label
+            >
+            <select
+              [(ngModel)]="newMember.ageGroup"
+              name="ageGroup"
+              required
+              class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            >
+              <option value="">Select age group</option>
+              <option value="child">Child</option>
+              <option value="adult">Adult</option>
+              <option value="elderly">Elderly</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Marital Status</label
+            >
+            <select
+              [(ngModel)]="newMember.maritalStatus"
+              name="maritalStatus"
+              class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            >
+              <option value="">Select status</option>
+              <option value="single">Single</option>
+              <option value="married">Married</option>
+              <option value="divorced">Divorced</option>
+              <option value="widowed">Widowed</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Occupation</label
+            >
+            <input
+              type="text"
+              [(ngModel)]="newMember.occupation"
+              name="occupation"
+              class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            />
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Work Status</label
+            >
+            <select
+              [(ngModel)]="newMember.workStatus"
+              name="workStatus"
+              class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            >
+              <option value="">Select status</option>
+              <option value="employed">Employed</option>
+              <option value="unemployed">Unemployed</option>
+              <option value="student">Student</option>
+              <option value="retired">Retired</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Educational Qualification</label
+            >
+            <input
+              type="text"
+              [(ngModel)]="newMember.educationalQualification"
+              name="educationalQualification"
+              class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+              placeholder="e.g., Bsc"
+            />
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >HouseHold Member Position</label
+            >
+            <input
+              type="text"
+              [(ngModel)]="newMember.hhPosition"
+              name="hhPosition"
+              class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+              placeholder="e.g., child"
+            />
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Date of Birth <span class="text-red-500">*</span></label
+            >
+            <input
+              type="date"
+              [(ngModel)]="newMember.dateOfBirth"
+              name="dateOfBirth"
+              required
+              class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            />
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Exact Date of Birth?</label
+            >
+            <select
+              [(ngModel)]="newMember.isExactDateOfBirth"
+              name="isExactDateOfBirth"
+              class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            >
+              <option [ngValue]="true">Yes</option>
+              <option [ngValue]="false">No</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Interview Date <span class="text-red-500">*</span></label
+            >
+            <input
+              type="date"
+              [(ngModel)]="newMember.interviewDate"
+              name="interviewDate"
+              required
+              class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            />
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Mother's Name</label
+            >
+            <input
+              type="text"
+              [(ngModel)]="newMember.motherName"
+              name="motherName"
+              class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            />
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Father's Name</label
+            >
+            <input
+              type="text"
+              [(ngModel)]="newMember.fatherName"
+              name="fatherName"
+              class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            />
+          </div>
+        </div>
+
+        <div class="flex justify-end space-x-3 pt-4">
+          <button
+            type="button"
+            (click)="closeAddMemberModal()"
+            class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            [disabled]="isAddingMember"
+            class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <span *ngIf="!isAddingMember">Add Member</span>
+            <span *ngIf="isAddingMember">Adding...</span>
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 </div>
